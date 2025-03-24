@@ -88,6 +88,65 @@ type FoodInfoResponse struct {
 	Error *ErrorResponse `json:"error,omitempty"`
 }
 
+type Allergen struct {
+	ID    string `json:"id"`
+	Name  string `json:"name"`
+	Value string `json:"value"` // "1" (True), "0" (False), "-1" (Unknown)
+}
+
+type Preference struct {
+	ID    string `json:"id"`
+	Name  string `json:"name"`
+	Value string `json:"value"` // "1" (True), "0" (False), "-1" (Unknown)
+}
+
+type FoodAttributes struct {
+	Allergens   struct {
+		Allergens []Allergen `json:"allergen"`
+	} `json:"allergens"`
+	Preferences struct {
+		Preferences []Preference `json:"preference"`
+	} `json:"preferences"`
+}
+
+type FoodImage struct {
+	URL      string `json:"image_url"`
+	Type     string `json:"image_type"`
+}
+
+type FoodImages struct {
+	Images []FoodImage `json:"food_image"`
+}
+
+type V3FoodSearchItem struct {
+	ID              string         `json:"food_id"`
+	Name            string         `json:"food_name"`
+	Type            string         `json:"food_type"`
+	//BrandName       string         `json:"brand_name,omitempty"`
+	URL             string         `json:"food_url"`
+	//SubCategories   FoodSubCategories `json:"food_sub_categories,omitempty"`
+	//Attributes      FoodAttributes    `json:"food_attributes,omitempty"`
+	//Images          FoodImages       `json:"food_images,omitempty"`
+	Servings        FoodServingsV3     `json:"servings"`
+}
+
+type FoodServingsV3 struct {
+	Serving []FoodServing `json:"serving"`
+}	
+
+type V3FoodSearchResults struct {
+	Food []V3FoodSearchItem `json:"food"`
+}
+
+type V3FoodSearchResponse struct {
+	MaxResults    string           `json:"max_results"`
+	TotalResults  string           `json:"total_results"`
+	PageNumber    string           `json:"page_number"`
+	Results       V3FoodSearchResults `json:"results"`
+	//Results []V3FoodSearchItem `json:"results"`
+	Error         *ErrorResponse    `json:"error,omitempty"`
+}
+
 // FoodSearch invokes the FatSecret 'foods.search' API call and
 // returns the response as a slice of FoodSearchItem structs
 func (c *Client) FoodSearch(query string) ([]FoodSearchItem, error) {
@@ -190,4 +249,38 @@ func (c *Client) FoodByID(id string) (*FoodInfo, error) {
 
 	// return the food info
 	return resp.Food, nil
+}
+
+// FoodSearchV3 invokes the FatSecret v3 'foods.search' API call and
+// returns the response as a V3FoodSearchResponse struct
+func (c *Client) FoodSearchV3(query string) (*V3FoodSearchResponse, error) {
+	// invoke the api call
+	body, err := c.InvokeAPI(
+		"foods.search.v3",
+		map[string]string{
+			"search_expression": query,
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	// parse the api response
+	resp := struct {
+		FoodsSearch *V3FoodSearchResponse `json:"foods_search"`
+	}{}
+
+	//fmt.Printf("XXXXFOODv3 RESPONSE: %s\n", string(body))
+	if err := json.Unmarshal(body, &resp); err != nil {
+		return nil, err
+	}
+
+	// if an error response was returned
+	if resp.FoodsSearch.Error != nil {
+		// return the response error message
+		return nil, errors.New(resp.FoodsSearch.Error.Message)
+	}
+
+	// return the response
+	return resp.FoodsSearch, nil
 }
