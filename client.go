@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	fatSecretAPIURL = "http://platform.fatsecret.com/rest/server.api"
+	fatSecretAPIURL = "https://platform.fatsecret.com/rest/server.api"
 )
 
 // Client is the top-level FatSecret client which is used to
