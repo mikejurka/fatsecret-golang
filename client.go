@@ -108,7 +108,7 @@ func (c *Client) buildURL(apiMethod string, params map[string]string) (string, e
 	// build the oauth base signature string
 	sigQuery := ""
 	for _, k := range oauthNames {
-		sigQuery += fmt.Sprintf("&%s=%s", k, m[k])
+		sigQuery += fmt.Sprintf("&%s=%s", k, sigEscape(m[k]))
 	}
 	sigQuery = sigEscape(sigQuery[1:])
 	sigBase := fmt.Sprintf("GET&%s&%s", c.escapedAPIURL, sigQuery)
