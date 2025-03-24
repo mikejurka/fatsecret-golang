@@ -32,11 +32,23 @@ func main() {
 	}
 
 	// search for food by name
+	fmt.Println("Food Search V1")
 	foods, err := client.FoodSearch("coffee")
 	if err != nil {
 		fmt.Printf("Cannot fetch food from API: err = '%v'", err)
 	}
 	for _, f := range foods {
+		fmt.Printf("FOOD: name = %s\n", f.Name)
+	}
+
+	// search for food by name (v3)
+	fmt.Println("Food Search V3")
+	foodsv3, err := client.FoodSearchV3("apple pie dessert")
+	if err != nil {
+		fmt.Printf("Cannot fetch food from v3 API: err = '%v'", err)
+	}
+	fmt.Printf("FOOD search v3: total results = %s\n", foodsv3.TotalResults)
+	for _, f := range foodsv3.Results.Food {
 		fmt.Printf("FOOD: name = %s\n", f.Name)
 	}
 
