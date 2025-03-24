@@ -268,14 +268,20 @@ func (c *Client) FoodSearchV3(query string) (*V3FoodSearchResponse, error) {
 	// parse the api response
 	resp := struct {
 		FoodsSearch *V3FoodSearchResponse `json:"foods_search"`
+		Error       *ErrorResponse        `json:"error,omitempty"`
 	}{}
 
-	//fmt.Printf("XXXXFOODv3 RESPONSE: %s\n", string(body))
 	if err := json.Unmarshal(body, &resp); err != nil {
 		return nil, err
 	}
 
-	// if an error response was returned
+	// if an error response was returned at the top level
+	if resp.Error != nil {
+		// return the response error message
+		return nil, errors.New(resp.Error.Message)
+	}
+
+	// if an error response was returned in the foods_search object
 	if resp.FoodsSearch.Error != nil {
 		// return the response error message
 		return nil, errors.New(resp.FoodsSearch.Error.Message)
