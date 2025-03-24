@@ -250,7 +250,7 @@ func (c *Client) FoodByID(id string) (*FoodInfo, error) {
 	return resp.Food, nil
 }
 
-// FoodSearchV3 invokes the FatSecret v3 'foods.search' API call and
+// FoodSearchV3 invokes the FatSecret v3 'foods.search.v3' API call and
 // returns the response as a V3FoodSearchResponse struct
 func (c *Client) FoodSearchV3(query string) (*V3FoodSearchResponse, error) {
 	// invoke the api call
