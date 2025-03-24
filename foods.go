@@ -101,7 +101,7 @@ type Preference struct {
 }
 
 type FoodAttributes struct {
-	Allergens   struct {
+	Allergens struct {
 		Allergens []Allergen `json:"allergen"`
 	} `json:"allergens"`
 	Preferences struct {
@@ -110,8 +110,8 @@ type FoodAttributes struct {
 }
 
 type FoodImage struct {
-	URL      string `json:"image_url"`
-	Type     string `json:"image_type"`
+	URL  string `json:"image_url"`
+	Type string `json:"image_type"`
 }
 
 type FoodImages struct {
@@ -119,32 +119,31 @@ type FoodImages struct {
 }
 
 type V3FoodSearchItem struct {
-	ID              string         `json:"food_id"`
-	Name            string         `json:"food_name"`
-	Type            string         `json:"food_type"`
-	//BrandName       string         `json:"brand_name,omitempty"`
-	URL             string         `json:"food_url"`
-	//SubCategories   FoodSubCategories `json:"food_sub_categories,omitempty"`
-	//Attributes      FoodAttributes    `json:"food_attributes,omitempty"`
-	//Images          FoodImages       `json:"food_images,omitempty"`
-	Servings        FoodServingsV3     `json:"servings"`
+	ID            string            `json:"food_id"`
+	Name          string            `json:"food_name"`
+	Type          string            `json:"food_type"`
+	BrandName     string            `json:"brand_name,omitempty"`
+	URL           string            `json:"food_url"`
+	SubCategories FoodSubCategories `json:"food_sub_categories,omitempty"`
+	Attributes    FoodAttributes    `json:"food_attributes,omitempty"`
+	Images        FoodImages        `json:"food_images,omitempty"`
+	Servings      FoodServingsV3    `json:"servings"`
 }
 
 type FoodServingsV3 struct {
 	Serving []FoodServing `json:"serving"`
-}	
+}
 
 type V3FoodSearchResults struct {
 	Food []V3FoodSearchItem `json:"food"`
 }
 
 type V3FoodSearchResponse struct {
-	MaxResults    string           `json:"max_results"`
-	TotalResults  string           `json:"total_results"`
-	PageNumber    string           `json:"page_number"`
-	Results       V3FoodSearchResults `json:"results"`
-	//Results []V3FoodSearchItem `json:"results"`
-	Error         *ErrorResponse    `json:"error,omitempty"`
+	MaxResults   string              `json:"max_results"`
+	TotalResults string              `json:"total_results"`
+	PageNumber   string              `json:"page_number"`
+	Results      V3FoodSearchResults `json:"results"`
+	Error        *ErrorResponse      `json:"error,omitempty"`
 }
 
 // FoodSearch invokes the FatSecret 'foods.search' API call and
